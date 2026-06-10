@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import pool from "../config/db.config.js";
+import protact from "../middlewares/auth.middleware.js";
 
 dotenv.config();
 
@@ -78,6 +79,10 @@ router.post("/login", async(req, res) => {
         user: user.rows[0]
     });
     
+});
+
+router.get("/me",protact, (req,res)=>{
+    return res.status(200).json({message: "User fetched successfully", user: req.user});
 });
 
 router.post("/logout", (req, res) => {
