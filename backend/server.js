@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import authRoutes from "./src/routes/auth.routes.js";
 import cookieParser from "cookie-parser";
+import transactionRoutes from "./src/routes/transaction.routes.js";
+import analyticsRoutes from "./src/routes/analytics.routes.js";
 
 dotenv.config();
 
@@ -11,6 +13,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 const PORT = process.env.PORT || 3000;
 
