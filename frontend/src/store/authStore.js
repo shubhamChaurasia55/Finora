@@ -3,11 +3,11 @@ import api from "../api/axios.js"
 
 const useAuthStore = create((set) => ({
     user: null,
-    isAuthanticated: false,
-    isLoading: false, 
+    isAuthenticated: false,
+    isLoading: true, 
 
 
-    signUp: async (formData) => {
+    signup: async (formData) => {
         try{
             set({isLoading: true});
             
@@ -15,7 +15,7 @@ const useAuthStore = create((set) => ({
 
             set({
                 user: response.data.user,
-                isAuthanticated: true,
+                isAuthenticated: true,
                 isLoading: false,
             });
 
@@ -44,7 +44,7 @@ const useAuthStore = create((set) => ({
 
             set({
                 user: response.data.user,
-                isAuthanticated: true,
+                isAuthenticated: true,
                 isLoading: false,
             });
 
@@ -75,7 +75,7 @@ const useAuthStore = create((set) => ({
         finally{
             set({
                 user: null,
-                isAuthanticated: false,
+                isAuthenticated: false,
             });
         }
     },
@@ -88,14 +88,15 @@ const useAuthStore = create((set) => ({
 
             set({
                 user: response.data.user,
-                isAuthanticated: true,
+                isAuthenticated: true,
                 isLoading: false,
             })
         }
         catch(error){
             set({
+                user: null,
+                isAuthenticated: false,
                 isLoading: false,
-                isAuthanticated: false,
             })
 
             return{
