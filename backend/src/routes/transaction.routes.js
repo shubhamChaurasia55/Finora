@@ -27,7 +27,7 @@ router.get("/all", protact, async (req, res) => {
     try{
         const {category, type, month} = req.query;
 
-        let query = `SELECT * FROM transactions WHERE user_id = $1`;
+        let query = `SELECT * FROM transactions WHERE user_id = $1 ORDER BY transaction_date DESC, created_at DESC`;
         let values = [req.user.id];
         
         if(category){
