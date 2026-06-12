@@ -11,53 +11,35 @@ import Transactions from "./pages/Transactions";
 import Analytics from "./pages/Analytics";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Layout from "./components/layout/Layout";
 
 function App() {
-  const getMe = useAuthStore((state) => state.getMe);
-
   useEffect(() => {
-    getMe();
+    useAuthStore.getState().getMe();
   }, []);
 
   return (
     <Routes>
-      {/* Default Route */}
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-      {/* Public Routes */}
       <Route path="/login" element={<Login />} />
 
       <Route path="/signup" element={<Signup />} />
 
-      {/* Protected Routes */}
       <Route
-        path="/dashboard"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <Layout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="/dashboard" element={<Dashboard />} />
 
-      <Route
-        path="/transactions"
-        element={
-          <ProtectedRoute>
-            <Transactions />
-          </ProtectedRoute>
-        }
-      />
+        <Route path="/transactions" element={<Transactions />} />
 
-      <Route
-        path="/analytics"
-        element={
-          <ProtectedRoute>
-            <Analytics />
-          </ProtectedRoute>
-        }
-      />
+        <Route path="/analytics" element={<Analytics />} />
+      </Route>
 
-      {/* Catch All */}
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
