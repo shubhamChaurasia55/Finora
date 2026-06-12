@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { Wallet, ArrowRight, ShieldAlert } from "lucide-react";
 import useAuthStore from "../store/authStore";
 
 const Login = () => {
@@ -35,29 +36,41 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-            <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4 relative overflow-hidden">
+            {/* Background decorative blobs */}
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse-subtle"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl animate-float"></div>
 
+            <div className="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-8 md:p-10 shadow-2xl relative z-10 animate-fade-in-up">
+                
+                {/* Branding & Welcome */}
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold">
-                        Welcome Back
+                    <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 items-center justify-center text-white mb-4 shadow-lg shadow-blue-500/20">
+                        <Wallet size={24} />
+                    </div>
+
+                    <h1 className="text-3xl font-extrabold text-white tracking-tight">
+                        Welcome back
                     </h1>
 
-                    <p className="text-gray-500 mt-2">
-                        Login to continue to Finora
+                    <p className="text-slate-400 text-sm mt-2 font-medium">
+                        Log in to resume your financial management
                     </p>
                 </div>
 
                 <form
                     onSubmit={handleSubmit(onSubmit)}
-                    className="space-y-4"
+                    className="space-y-5"
                 >
                     {/* Email */}
-                    <div>
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider pl-1">
+                            Email Address
+                        </label>
                         <input
                             type="email"
-                            placeholder="Email"
-                            className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="name@company.com"
+                            className="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-sm font-medium"
                             {...register("email", {
                                 required: "Email is required",
                                 pattern: {
@@ -68,25 +81,35 @@ const Login = () => {
                         />
 
                         {errors.email && (
-                            <p className="text-red-500 text-sm mt-1">
+                            <p className="text-rose-500 text-xs mt-1 pl-1 font-medium flex items-center gap-1">
+                                <ShieldAlert size={12} />
                                 {errors.email.message}
                             </p>
                         )}
                     </div>
 
                     {/* Password */}
-                    <div>
+                    <div className="space-y-1.5">
+                        <div className="flex justify-between items-center px-1">
+                            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                                Password
+                            </label>
+                            <a href="#" className="text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors">
+                                Forgot?
+                            </a>
+                        </div>
                         <input
                             type="password"
-                            placeholder="Password"
-                            className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="••••••••"
+                            className="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 text-sm"
                             {...register("password", {
                                 required: "Password is required",
                             })}
                         />
 
                         {errors.password && (
-                            <p className="text-red-500 text-sm mt-1">
+                            <p className="text-rose-500 text-xs mt-1 pl-1 font-medium flex items-center gap-1">
+                                <ShieldAlert size={12} />
                                 {errors.password.message}
                             </p>
                         )}
@@ -94,8 +117,9 @@ const Login = () => {
 
                     {/* Server Error */}
                     {serverError && (
-                        <div className="bg-red-100 text-red-700 p-3 rounded-lg text-sm">
-                            {serverError}
+                        <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 p-3.5 rounded-xl text-xs font-medium flex items-start gap-2 animate-pulse-subtle">
+                            <ShieldAlert size={16} className="mt-0.5 flex-shrink-0" />
+                            <span>{serverError}</span>
                         </div>
                     )}
 
@@ -103,19 +127,26 @@ const Login = () => {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none hover:shadow-lg hover:shadow-blue-500/15 flex items-center justify-center gap-2 cursor-pointer mt-2"
                     >
-                        {isLoading ? "Logging In..." : "Login"}
+                        {isLoading ? (
+                            "Verifying details..."
+                        ) : (
+                            <>
+                                Sign In
+                                <ArrowRight size={16} />
+                            </>
+                        )}
                     </button>
 
                     {/* Signup Link */}
-                    <p className="text-center text-sm text-gray-600">
+                    <p className="text-center text-sm text-slate-400 mt-6 font-medium">
                         Don't have an account?{" "}
                         <Link
                             to="/signup"
-                            className="text-blue-600 hover:underline"
+                            className="text-blue-400 hover:text-blue-300 font-semibold hover:underline"
                         >
-                            Sign Up
+                            Create account
                         </Link>
                     </p>
                 </form>
