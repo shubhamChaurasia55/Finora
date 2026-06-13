@@ -128,4 +128,135 @@ router.get("/dashboard",protact, async(req, res) => {
     }
 });
 
+// Monthly-scoped dashboard data 
+// GET /analytics/dashboard/monthly?month=6&year=2026
+router.get("/dashboard/monthly", protact, async (req, res) => {
+    try {
+        const month = Number(req.query.month);
+        const year = Number(req.query.year);
+
+        if (!month || !year) {
+            return res.status(400).json({ message: "Month and year are required" });
+        }
+
+        // Monthly income/expense/savings + transaction counts
+        const summaryResult = await pool.query(`
+            SELECT
+                COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END), 0) AS income,
+                COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0) AS expense,
+                COUNT(*) AS total_transactions,
+                COALESCE(SUM(CASE WHEN type = 'income' THEN 1 ELSE 0 END), 0) AS income_count,
+                COALESCE(SUM(CASE WHEN type = 'expense' THEN 1 ELSE 0 END), 0) AS expense_count
+            FROM transactions
+            WHERE user_id = $1
+              AND EXTRACT(MONTH FROM transaction_date) = $2
+              AND EXTRACT(YEAR FROM transaction_date) = $3
+        `, [req.user.id, month, year]);
+
+        const row = summaryResult.rows[0];
+        const income = Number(row.income);
+        const expense = Number(row.expense);
+        const savings = income - expense;
+
+        // Top 5 expense categories for this month
+        const categoriesResult = await pool.query(`
+            SELECT category, SUM(amount) AS total, COUNT(*) AS count
+            FROM transactions
+            WHERE user_id = $1
+              AND type = 'expense'
+              AND EXTRACT(MONTH FROM transaction_date) = $2
+              AND EXTRACT(YEAR FROM transaction_date) = $3
+            GROUP BY category
+            ORDER BY total DESC
+            LIMIT 5
+        `, [req.user.id, month, year]);
+
+        // Previous month income/expense for MoM comparison
+        let prevMonth = month - 1;
+        let prevYear = year;
+        if (prevMonth === 0) {
+            prevMonth = 12;
+            prevYear = year - 1;
+        }
+
+        const prevResult = await pool.query(`
+            SELECT
+                COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END), 0) AS income,
+                COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0) AS expense
+            FROM transactions
+            WHERE user_id = $1
+              AND EXTRACT(MONTH FROM transaction_date) = $2
+              AND EXTRACT(YEAR FROM transaction_date) = $3
+        `, [req.user.id, prevMonth, prevYear]);
+
+        const prevIncome = Number(prevResult.rows[0].income);
+        const prevExpense = Number(prevResult.rows[0].expense);
+
+        // Recent 5 transactions for this month
+        const recentResult = await pool.query(`
+            SELECT id, amount, description, category, type, transaction_date
+            FROM transactions
+            WHERE user_id = $1
+              AND EXTRACT(MONTH FROM transaction_date) = $2
+              AND EXTRACT(YEAR FROM transaction_date) = $3
+            ORDER BY transaction_date DESC, created_at DESC
+            LIMIT 5
+        `, [req.user.id, month, year]);
+
+        return res.status(200).json({
+            message: "Monthly dashboard data fetched successfully",
+            summary: {
+                income,
+                expense,
+                savings,
+                totalTransactions: Number(row.total_transactions),
+                incomeCount: Number(row.income_count),
+                expenseCount: Number(row.expense_count),
+            },
+            topCategories: categoriesResult.rows,
+            previousMonth: {
+                income: prevIncome,
+                expense: prevExpense,
+                savings: prevIncome - prevExpense,
+            },
+            recentTransactions: recentResult.rows,
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+// Monthly categories breakdown
+// GET /analytics/categories/monthly?month=6&year=2026
+router.get("/categories/monthly", protact, async (req, res) => {
+    try {
+        const month = Number(req.query.month);
+        const year = Number(req.query.year);
+
+        if (!month || !year) {
+            return res.status(400).json({ message: "Month and year are required" });
+        }
+
+        const result = await pool.query(`
+            SELECT category, SUM(amount) AS total, COUNT(*) AS count
+            FROM transactions
+            WHERE user_id = $1
+              AND type = 'expense'
+              AND EXTRACT(MONTH FROM transaction_date) = $2
+              AND EXTRACT(YEAR FROM transaction_date) = $3
+            GROUP BY category
+            ORDER BY total DESC
+        `, [req.user.id, month, year]);
+
+        return res.status(200).json({
+            message: "Monthly categories fetched successfully",
+            summary: result.rows,
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 export default router;

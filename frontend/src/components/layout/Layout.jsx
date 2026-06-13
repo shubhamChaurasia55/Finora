@@ -8,7 +8,7 @@ const Layout = () => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-slate-50 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-50/40 via-blue-50/20 to-slate-50 flex">
+    <div className="h-screen w-screen overflow-hidden bg-slate-50 flex">
       
       {/* Mobile Sidebar (Drawer) */}
       <div 
@@ -19,12 +19,12 @@ const Layout = () => {
         {/* Backdrop */}
         <div 
           onClick={() => setIsMobileSidebarOpen(false)} 
-          className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm transition-opacity duration-300"
+          className="absolute inset-0 bg-slate-950/30 backdrop-blur-sm transition-opacity duration-300"
         />
         
-        {/* Sidebar Drawer container */}
+        {/* Sidebar Drawer */}
         <div 
-          className={`absolute inset-y-0 left-0 w-72 bg-white flex flex-col transition-transform duration-300 transform ${
+          className={`absolute inset-y-0 left-0 w-64 bg-white flex flex-col shadow-xl transition-transform duration-300 transform ${
             isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -32,27 +32,16 @@ const Layout = () => {
         </div>
       </div>
 
-      {/* Desktop Sidebar (Permanent) */}
-      <div className="hidden lg:flex w-72 h-full shrink-0">
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:flex w-60 h-full shrink-0">
         <Sidebar />
       </div>
 
-      {/* Main Content Column */}
+      {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-        {/* Top Navigation */}
         <Navbar onMenuClick={() => setIsMobileSidebarOpen(true)} />
 
-        {/* Page Content - scrollable */}
-        <main
-          className="
-            flex-1
-            px-4
-            py-6
-            md:px-6
-            lg:px-8
-            overflow-y-auto
-          "
-        >
+        <main className="flex-1 px-4 py-5 md:px-6 lg:px-8 overflow-y-auto">
           <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>
