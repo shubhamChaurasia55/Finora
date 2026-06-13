@@ -144,7 +144,7 @@ const Transactions = () => {
   if (error) {
     return (
       <div className="bg-rose-50 border border-rose-100 rounded-2xl p-5 text-rose-600 text-sm font-semibold max-w-xl mx-auto mt-10 shadow-sm flex items-start gap-3">
-        <Receipt className="flex-shrink-0" />
+        <Receipt className="shrink-0" />
         <div>
           <p className="font-bold text-base">Ledger Error</p>
           <p className="mt-1 text-rose-500">{error}</p>

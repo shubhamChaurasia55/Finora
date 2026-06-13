@@ -99,7 +99,7 @@ const RecentTransactions = () => {
             >
               <div className="flex items-center gap-3.5 min-w-0">
                 <div
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
                     tx.type === "income"
                       ? "bg-emerald-50 text-emerald-600 border border-emerald-100/30"
                       : "bg-rose-50 text-rose-600 border border-rose-100/30"
@@ -112,7 +112,7 @@ const RecentTransactions = () => {
                   <p className="text-[11px] text-slate-400 font-medium mt-1 uppercase tracking-wider">{tx.category}</p>
                 </div>
               </div>
-              <div className="text-right flex-shrink-0">
+              <div className="text-right shrink-0">
                 <p
                   className={`font-bold text-sm leading-tight ${
                     tx.type === "income" ? "text-emerald-600" : "text-slate-900"

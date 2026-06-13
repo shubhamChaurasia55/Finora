@@ -198,7 +198,7 @@ const Signup = () => {
                     {/* Server Error */}
                     {serverError && (
                         <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 p-3.5 rounded-xl text-xs font-medium flex items-start gap-2 animate-pulse-subtle">
-                            <ShieldAlert size={16} className="mt-0.5 flex-shrink-0" />
+                            <ShieldAlert size={16} className="mt-0.5 shrink-0" />
                             <span>{serverError}</span>
                         </div>
                     )}

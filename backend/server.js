@@ -5,6 +5,7 @@ import authRoutes from "./src/routes/auth.routes.js";
 import cookieParser from "cookie-parser";
 import transactionRoutes from "./src/routes/transaction.routes.js";
 import analyticsRoutes from "./src/routes/analytics.routes.js";
+import budgetRoutes from "./src/routes/budget.routes.js";
 
 dotenv.config();
 
@@ -20,9 +21,12 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+console.log("THIS SERVER FILE IS RUNNING");
 app.use("/api/auth", authRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/budgets", budgetRoutes);
+console.log("Budget routes loaded");
 
 const PORT = process.env.PORT || 3000;
 

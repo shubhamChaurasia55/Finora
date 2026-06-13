@@ -133,7 +133,7 @@ const Dashboard = () => {
   if (error) {
     return (
       <div className="bg-rose-50 border border-rose-100 rounded-2xl p-5 text-rose-600 text-sm font-semibold max-w-xl mx-auto mt-10 shadow-sm flex items-start gap-3">
-        <AlertTriangle className="flex-shrink-0" />
+        <AlertTriangle className="shrink-0" />
         <div>
           <p className="font-bold text-base">Synchronization Error</p>
           <p className="mt-1 text-rose-500">{error}</p>
@@ -375,7 +375,7 @@ const Dashboard = () => {
                   key={index}
                   className={`border rounded-2xl p-4 flex gap-3 items-start transition-all duration-300 hover:shadow-sm ${bg} ${border}`}
                 >
-                  <Icon size={18} className={`mt-0.5 flex-shrink-0 ${insight.type === "warning" ? "text-rose-500" : insight.type === "success" ? "text-emerald-500" : "text-indigo-500"}`} />
+                  <Icon size={18} className={`mt-0.5 shrink-0 ${insight.type === "warning" ? "text-rose-500" : insight.type === "success" ? "text-emerald-500" : "text-indigo-500"}`} />
                   <p className={`text-xs font-semibold leading-relaxed ${text}`}>
                     {insight.text}
                   </p>

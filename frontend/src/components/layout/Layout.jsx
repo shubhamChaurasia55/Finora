@@ -33,7 +33,7 @@ const Layout = () => {
       </div>
 
       {/* Desktop Sidebar (Permanent) */}
-      <div className="hidden lg:flex w-72 h-full flex-shrink-0">
+      <div className="hidden lg:flex w-72 h-full shrink-0">
         <Sidebar />
       </div>
 
