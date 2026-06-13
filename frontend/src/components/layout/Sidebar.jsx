@@ -5,6 +5,7 @@ import {
   BarChart3,
   LogOut,
   Wallet,
+  Target,
 } from "lucide-react";
 
 import useAuthStore from "../../store/authStore";
@@ -24,6 +25,11 @@ const navItems = [
     label: "Analytics",
     path: "/analytics",
     icon: BarChart3,
+  },
+  {
+    label: "Budgets",
+    path: "/budgets",
+    icon: Target,
   },
 ];
 

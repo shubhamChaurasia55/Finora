@@ -9,6 +9,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import Analytics from "./pages/Analytics";
+import Budgets from "./pages/Budgets";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Layout from "./components/layout/Layout";
@@ -38,6 +39,8 @@ function App() {
         <Route path="/transactions" element={<Transactions />} />
 
         <Route path="/analytics" element={<Analytics />} />
+
+        <Route path="/budgets" element={<Budgets />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
